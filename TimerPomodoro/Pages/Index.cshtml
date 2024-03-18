@@ -1,10 +1,100 @@
-﻿@page
+﻿<style>
+    #timerDisplay {
+        font-size: 175px;
+        margin-top: 70px; 
+    }
+    /* Добавляем правило для плавной анимации фона */
+    body {
+        transition: background-color 0.5s ease;
+    }
+</style>
+
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Таймер Помодоро";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Таймер Помодоро</h1>
+    <p>Узнайте больше на <a href="https://dzen.ru/maxthinks" target="_blank">Макс Думает!</a> - лучший блог о помидорах.</p>
+    
+    <div>
+        <label for="workTime">Время работы (мин):</label>
+        <input type="number" id="workTime" value="25">
+    </div>
+    <div>
+        <label for="breakTime">Время отдыха (мин):</label>
+        <input type="number" id="breakTime" value="5">
+    </div>
+    <div>
+        <button onclick="startTimer()">Начать</button>
+        <button onclick="togglePause()">Пауза/Продолжить</button>
+        <button onclick="stopTimer()">Стоп</button>
+    </div>
+
+    <h2 id="timerDisplay"></h2>
+    
+<script>
+    var isWorkTime = true;
+    var timer;
+    var isPaused = false; 
+    var currentTime; 
+    
+    function startTimer() {
+        document.body.style.backgroundColor = "#ed4455"; // Изменяем цвет фона на красный
+        var workTime = document.getElementById("workTime").value * 60;
+        var breakTime = document.getElementById("breakTime").value * 60;
+        currentTime = isWorkTime ? workTime : breakTime;
+        
+        if(timer) {
+            clearInterval(timer); 
+        }
+        
+        timer = setInterval(updateTimer, 1000);
+        isPaused = false; 
+    }
+
+function updateTimer() {
+    if(currentTime <= 0) {
+        isWorkTime = !isWorkTime;
+        // Проверяем, наступило ли время отдыха, и меняем цвет фона на голубой
+        if(!isWorkTime) {
+            document.body.style.backgroundColor = "#12bbaa"; // Голубой цвет
+        } else {
+            // Здесь вы можете указать цвет для времени работы, если это необходимо
+            document.body.style.backgroundColor = "red"; // Возвращаем красный цвет для времени работы
+        }
+
+            var workTime = document.getElementById("workTime").value * 60;
+            var breakTime = document.getElementById("breakTime").value * 60;
+            currentTime = isWorkTime ? workTime : breakTime;
+            alert(isWorkTime ? "Время работать!" : "Время отдыха!");
+        }
+        
+        var minutes = Math.floor(currentTime / 60);
+        var seconds = currentTime % 60;
+        document.getElementById("timerDisplay").innerText = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        currentTime--;
+    }
+
+    function togglePause() {
+        document.body.style.backgroundColor = isPaused ? "#ed4455" : "#12bbaa"; // Изменяем цвет фона на зеленый или обратно на красный
+        if (isPaused) {
+            timer = setInterval(updateTimer, 1000);
+        } else {
+            clearInterval(timer);
+        }
+        isPaused = !isPaused;
+    }
+    
+    function stopTimer() {
+        document.body.style.backgroundColor = "white"; // Изменяем цвет фона на белый
+        clearInterval(timer);
+        isPaused = false;
+        document.getElementById("timerDisplay").innerText = "0:00";
+        isWorkTime = true;
+    }
+</script>
+
 </div>
