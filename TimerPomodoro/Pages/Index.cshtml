@@ -1,4 +1,9 @@
-﻿<style>
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Таймер Помодоро";
+}
+<style>
     #timerDisplay {
         font-size: 175px;
         margin-top: 70px; 
@@ -9,11 +14,7 @@
     }
 </style>
 
-@page
-@model IndexModel
-@{
-    ViewData["Title"] = "Таймер Помодоро";
-}
+
 
 <div class="text-center">
     <h1 class="display-4">Таймер Помодоро</h1>
